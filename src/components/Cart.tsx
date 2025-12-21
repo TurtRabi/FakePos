@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CartItem, Voucher } from '@/types/pos';
+import { ApplyVoucherResult, CartItem, Voucher } from '@/types/pos';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,8 +22,8 @@ interface CartProps {
   onRemoveItem: (productId: string) => void;
   onCheckout: () => void;
   onClearCart: () => void;
-  onApplyVoucher: (code: string) => boolean;
-  onApplyVoucherByGuid: (guid: string) => boolean;
+  onApplyVoucher: (code: string) => ApplyVoucherResult;
+  onApplyVoucherByGuid: (guid: string) => ApplyVoucherResult;
   onRemoveVoucher: () => void;
   onSetCustomerId: (id: string | null) => void;
 }
@@ -49,21 +49,21 @@ export const Cart = ({
 
   const handleApplyVoucher = () => {
     if (!voucherCode.trim()) return;
-    const success = onApplyVoucher(voucherCode);
-    if (success) {
-      toast.success('Áp dụng voucher thành công!');
+    const result = onApplyVoucher(voucherCode);
+    if (result.success) {
+      toast.success(result.message);
       setVoucherCode('');
     } else {
-      toast.error('Voucher không hợp lệ hoặc đã hết hạn.');
+      toast.error(result.message);
     }
   };
 
   const handleScanSuccess = (guid: string) => {
-    const success = onApplyVoucherByGuid(guid);
-    if (success) {
-      toast.success('Quét và áp dụng voucher thành công!');
+    const result = onApplyVoucherByGuid(guid);
+    if (result.success) {
+      toast.success(result.message);
     } else {
-      toast.error('Mã QR không phải voucher hợp lệ.');
+      toast.error(result.message);
     }
     setIsScannerOpen(false);
   };

@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
-import { CartItem, Product, Voucher } from '@/types/pos';
+import { CartItem, Product, Voucher, ApplyVoucherResult } from '@/types/pos';
 import { findVoucherByCode, findVoucherByGuid } from '@/data/vouchers';
+import { formatCurrency } from '@/lib/utils';
 
 export const useCart = () => {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -69,23 +70,39 @@ export const useCart = () => {
   const total = useMemo(() => subtotal - discount, [subtotal, discount]);
   const itemCount = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 
-  const applyVoucher = useCallback((code: string): boolean => {
+  const applyVoucher = useCallback((code: string): ApplyVoucherResult => {
     const voucher = findVoucherByCode(code);
-    if (voucher) {
-      setAppliedVoucher(voucher);
-      return true;
+    if (!voucher) {
+      return { success: false, message: 'Voucher không hợp lệ.' };
     }
-    return false;
-  }, []);
+
+    if (voucher.minimumOrderAmount && subtotal < voucher.minimumOrderAmount) {
+      return { 
+        success: false, 
+        message: `Đơn hàng phải đạt tối thiểu ${formatCurrency(voucher.minimumOrderAmount)} để sử dụng voucher này.` 
+      };
+    }
+
+    setAppliedVoucher(voucher);
+    return { success: true, message: 'Áp dụng voucher thành công!' };
+  }, [subtotal]);
   
-  const applyVoucherByGuid = useCallback((guid: string): boolean => {
+  const applyVoucherByGuid = useCallback((guid: string): ApplyVoucherResult => {
     const voucher = findVoucherByGuid(guid);
-    if (voucher) {
-      setAppliedVoucher(voucher);
-      return true;
+    if (!voucher) {
+      return { success: false, message: 'Mã QR không phải voucher hợp lệ.' };
     }
-    return false;
-  }, []);
+    
+    if (voucher.minimumOrderAmount && subtotal < voucher.minimumOrderAmount) {
+      return { 
+        success: false, 
+        message: `Đơn hàng phải đạt tối thiểu ${formatCurrency(voucher.minimumOrderAmount)} để sử dụng voucher này.` 
+      };
+    }
+
+    setAppliedVoucher(voucher);
+    return { success: true, message: 'Quét và áp dụng voucher thành công!' };
+  }, [subtotal]);
 
   const removeVoucher = useCallback(() => {
     setAppliedVoucher(null);

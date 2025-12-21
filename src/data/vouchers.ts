@@ -2,23 +2,20 @@ import { Voucher } from '@/types/pos';
 
 export const vouchers: Voucher[] = [
   {
-    code: 'GIAM25K',
-    guidId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+    code: 'ICECOFFEE10K',
+    guidId: '35d82aad-ea83-4db2-81c2-1e4708062e30',
     type: 'fixed',
-    value: 25000,
+    value: 10000,
+    minimumOrderAmount: 100000,
   },
   {
-    code: 'GIAM50K',
-    guidId: 'd2f9b8a0-2e5a-4a69-9c2f-4a6f7e9a0b1c',
+    code: 'ICXMAS25',
+    guidId: 'ba078989-d8cb-463b-835f-5ecb77acf30e',
     type: 'fixed',
-    value: 50000,
+    value: 20000,
+    minimumOrderAmount: 150000,
   },
-  {
-    code: 'GIAM10',
-    guidId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
-    type: 'percentage',
-    value: 10,
-  },
+
 ];
 
 export const findVoucherByCode = (code: string): Voucher | undefined => {

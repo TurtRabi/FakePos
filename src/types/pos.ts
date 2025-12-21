@@ -40,10 +40,16 @@ export interface Voucher {
   guidId: string;
   type: 'fixed' | 'percentage';
   value: number;
+  minimumOrderAmount?: number;
 }
 
 export interface ApiConfig {
   serviceCode: string;
   posAppId: string;
   apiUrl: string;
+}
+
+export interface ApplyVoucherResult {
+  success: boolean;
+  message: string;
 }

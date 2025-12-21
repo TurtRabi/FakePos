@@ -74,12 +74,11 @@ export default function POSSystem() {
     // If not a product, try to find a voucher by GUID
     const voucher = findVoucherByGuid(code);
     if (voucher) {
-      const success = applyVoucher(voucher.code);
-      if (success) {
-        toast.success(`Đã áp dụng voucher: ${voucher.code}`);
+      const result = applyVoucher(voucher.code);
+      if (result.success) {
+        toast.success(result.message);
       } else {
-        // This case might happen if applyVoucher has its own logic that fails
-        toast.error('Không thể áp dụng voucher.');
+        toast.error(result.message);
       }
       return;
     }
