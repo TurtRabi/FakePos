@@ -54,15 +54,6 @@ export const ApiConfigForm = () => {
             placeholder="Nhập ID ứng dụng POS"
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="apiUrl">API URL</Label>
-          <Input
-            id="apiUrl"
-            value={apiUrlInput}
-            onChange={(e) => setApiUrlInput(e.target.value)}
-            placeholder="Nhập URL API"
-          />
-        </div>
         <Button onClick={handleSave}>Lưu cấu hình</Button>
       </CardContent>
     </Card>

@@ -46,6 +46,7 @@ export const Cart = ({
 }: CartProps) => {
   const [voucherCode, setVoucherCode] = useState('');
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [isCustomerScannerOpen, setIsCustomerScannerOpen] = useState(false);
 
   const handleApplyVoucher = () => {
     if (!voucherCode.trim()) return;
@@ -68,6 +69,12 @@ export const Cart = ({
     setIsScannerOpen(false);
   };
 
+  const handleCustomerScanSuccess = (scannedData: string) => {
+    onSetCustomerId(scannedData);
+    toast.success("Mã khách hàng đã được quét thành công.");
+    setIsCustomerScannerOpen(false);
+  };
+
   return (
     <>
       <QrScannerModal 
@@ -75,16 +82,28 @@ export const Cart = ({
         onClose={() => setIsScannerOpen(false)}
         onScanSuccess={handleScanSuccess}
       />
+      <QrScannerModal 
+        isOpen={isCustomerScannerOpen}
+        onClose={() => setIsCustomerScannerOpen(false)}
+        onScanSuccess={handleCustomerScanSuccess}
+        title="Quét mã QR khách hàng"
+        description="Đặt mã QR của khách hàng vào giữa khung để quét."
+      />
       <Card className="h-full flex flex-col">
         <CardHeader className="flex-shrink-0 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="customer-id">Khách hàng (SĐT/Mã thẻ)</Label>
-            <Input
-              id="customer-id"
-              placeholder="Nhập mã khách hàng..."
-              value={customerId || ''}
-              onChange={(e) => onSetCustomerId(e.target.value)}
-            />
+            <div className="flex gap-2">
+              <Input
+                id="customer-id"
+                placeholder="Nhập mã khách hàng..."
+                value={customerId || ''}
+                onChange={(e) => onSetCustomerId(e.target.value)}
+              />
+              <Button variant="outline" size="icon" onClick={() => setIsCustomerScannerOpen(true)}>
+                <Camera className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
           <Separator/>
           <div className="flex items-center justify-between">

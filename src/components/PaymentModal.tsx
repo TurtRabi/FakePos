@@ -50,10 +50,10 @@ export const PaymentModal = ({
       cashReceived ? Math.max(0, parseFloat(cashReceived) - total) : 0;
 
   const handlePayment = useCallback(async () => {
-    if (!apiConfig.apiUrl || !apiConfig.serviceCode || !apiConfig.posAppId) {
+    if (!apiConfig.serviceCode || !apiConfig.posAppId) {
       toast.error('Lỗi cấu hình API', {
         description:
-            'Vui lòng cấu hình đầy đủ API URL, Service Code và Pos App ID.',
+            'Vui lòng cấu hình đầy đủ Service Code và Pos App ID.',
       });
       return;
     }
@@ -69,7 +69,10 @@ export const PaymentModal = ({
     };
 
     try {
-      const response = await fetch(apiConfig.apiUrl, {
+      // Hardcoded apiUrl as per user request
+      const hardcodedApiUrl = "https://unipoint.id.vn/api/pos/earn"; 
+
+      const response = await fetch(hardcodedApiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,13 +84,17 @@ export const PaymentModal = ({
 
       if (!response.ok) {
         let message = 'Payment API call failed';
-        try {
-          const text = await response.text();
-          if (text) {
+        const text = await response.text();
+        if (text) {
+          try {
             const json = JSON.parse(text);
             message = json.message || message;
+          } catch (jsonParseError) {
+            console.error("Failed to parse error response JSON:", jsonParseError);
+            // If JSON parsing fails, we still have the original 'text' to work with or fallback to a generic message.
+            // For now, we'll let the outer error handle it, or you could use 'text' here if it contains a readable error.
           }
-        } catch {}
+        }
         throw new Error(message);
       }
 
@@ -105,10 +112,10 @@ export const PaymentModal = ({
 
       onPaymentComplete(paymentDetails);
       onClose();
-    } catch (err: any) {
-      console.error(err);
+    } catch (error: unknown) {
+      console.error(error);
       toast.error('Lỗi thanh toán', {
-        description: err.message || 'Có lỗi xảy ra khi thanh toán',
+        description: error instanceof Error ? error.message : 'Có lỗi xảy ra khi thanh toán',
       });
     } finally {
       setIsProcessing(false);

@@ -6,18 +6,26 @@ interface QrScannerModalProps {
   isOpen: boolean;
   onClose: () => void;
   onScanSuccess: (decodedText: string) => void;
+  title?: string;
+  description?: string;
 }
 
 const qrCodeRegionId = "qr-code-scanner-region";
 
-export const QrScannerModal = ({ isOpen, onClose, onScanSuccess }: QrScannerModalProps) => {
+export const QrScannerModal = ({ 
+  isOpen, 
+  onClose, 
+  onScanSuccess,
+  title = "Quét mã QR Voucher",
+  description = "Đặt mã QR của voucher vào giữa khung để quét."
+}: QrScannerModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Quét mã QR Voucher</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
-            Đặt mã QR của voucher vào giữa khung để quét.
+            {description}
           </DialogDescription>
         </DialogHeader>
         {isOpen && ( // Conditionally render QrScannerCore only when modal is open
