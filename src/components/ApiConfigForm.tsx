@@ -28,6 +28,10 @@ export const ApiConfigForm = () => {
     toast.success("Cấu hình API đã lưu", { // Use sonner's toast.success
       description: "Các cài đặt API đã được cập nhật thành công.",
     });
+    // Explicitly update local state to reflect the saved values immediately
+    setServiceCodeInput(serviceCodeInput);
+    setPosAppIdInput(posAppIdInput);
+    setApiUrlInput(apiUrlInput);
   };
 
   return (
