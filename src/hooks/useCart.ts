@@ -89,8 +89,9 @@ export const useCart = () => {
   
   const applyVoucherByGuid = useCallback((guid: string): ApplyVoucherResult => {
     const voucher = findVoucherByGuid(guid);
-    if (!voucher) {
-      return { success: false, message: 'Mã QR không phải voucher hợp lệ.' };
+    // Explicitly check if voucher is a valid object and has required properties
+    if (!voucher || typeof voucher !== 'object' || !voucher.code || !voucher.guidId) {
+      return { success: false, message: 'Không tìm thấy voucher.' };
     }
     
     if (voucher.minimumOrderAmount && subtotal < voucher.minimumOrderAmount) {

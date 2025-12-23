@@ -62,7 +62,6 @@ export const QrScannerCore = ({ qrCodeRegionId, onScanSuccess, onClose }: QrScan
           (decodedText, decodedResult) => {
             console.log("QR Scanner Core: Scan successful:", decodedText, decodedResult);
             onScanSuccess(decodedText);
-            toast.success("Quét mã thành công!");
             // onClose(); // Let parent decide to close, or close via onScanSuccess
           },
           (errorMessage) => {
