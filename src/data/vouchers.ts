@@ -15,6 +15,13 @@ export const vouchers: Voucher[] = [
     value: 20000,
     minimumOrderAmount: 150000,
   },
+  {
+    code: 'MERRYXMAS10',
+    guidId: '79ecaeb9-477c-431a-acf1-aafa0bb1d5c1',
+    type: 'fixed',
+    value: 10000,
+    minimumOrderAmount: 50000,
+  }
 
 ];
 
