@@ -21,7 +21,14 @@ export const vouchers: Voucher[] = [
     type: 'fixed',
     value: 10000,
     minimumOrderAmount: 50000,
-  }
+  },
+  {
+    code: 'XMASCOMMING15',
+    guidId: '7429337a-c109-47f0-a661-54c2d56fd204',
+    type: 'percentage',
+    value: 15,
+    minimumOrderAmount: 80000,
+  },
 
 ];
 
